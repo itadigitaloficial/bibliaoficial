@@ -410,5 +410,5 @@ curl -X GET "https://itadigital.com.br/api/biblia/verses/nvi/sl/23" \
 Distribuído sob a licença **MIT**.
 
 Desenvolvido com excelência pela **Ita Digital Oficial**  
-🌐 **Website**: [itadigital.com.br](https://itadigital.com.br) | [verses.itadigital.com.br](https://verses.itadigital.com.br)  
+🌐 **Website**: [itadigital.com.br](https://itadigital.com.br)  
 📦 **Repositório Oficial**: [github.com/itadigitaloficial/bibliaoficial](https://github.com/itadigitaloficial/bibliaoficial)
