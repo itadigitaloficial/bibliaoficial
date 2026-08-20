@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.icons8.com/isometric/512/holy-bible.png" alt="Bíblia Oficial Logo" width="120" />
+  <img src="banner.png" alt="Bíblia Oficial API - Banner" width="100%" />
 </p>
 
 <h1 align="center">📖 Bíblia Oficial API (RESTful)</h1>
