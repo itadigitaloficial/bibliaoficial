@@ -1,8 +1,9 @@
 <?php
 /**
- * 📖 Bíblia Digital API Oficial (PHP + MySQL)
+ * 📖 Bíblia Oficial API (PHP + MySQL)
  * RESTful API com Autenticação por Token (Bearer Token)
- * Repositório Oficial: https://github.com/itadigitaloficial/bibliaoficial
+ * URL Oficial: https://itadigital.com.br/api/biblia/
+ * Repositório: https://github.com/itadigitaloficial/bibliaoficial
  */
 
 header('Access-Control-Allow-Origin: *');
@@ -17,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // 1. Configuração do Banco de Dados
 $dbConfig = [
-    'host' => '153.75.245.98', // Altere para 127.0.0.1 se estiver no mesmo servidor
+    'host' => '153.75.245.98', // Altere para 127.0.0.1 se o MySQL estiver na mesma máquina
     'port' => 3306,
     'dbname' => 'biblia',
     'user' => 'bibliaitadigital',
@@ -80,7 +81,7 @@ function requireAuth($pdo) {
         http_response_code(403);
         echo json_encode([
             'error' => 'Token inválido ou inativo',
-            'message' => 'Gere um novo token em POST /api/users/token'
+            'message' => 'Gere um novo token em POST /api/biblia/users/token'
         ], JSON_UNESCAPED_UNICODE);
         exit;
     }
@@ -97,13 +98,21 @@ function getJsonBody() {
     return json_decode($input, true) ?: [];
 }
 
-// 3. Roteador de Requisições
+// 3. Roteador Flexível (Funciona na raiz, /api, /api/biblia ou subpastas)
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$method = $_SERVER['REQUEST_METHOD'];
 
-// Normalizar rota removendo prefixo /api se houver
-$uri = preg_replace('#^/api#', '', $uri);
+if ($scriptDir !== '/' && strpos($uri, $scriptDir) === 0) {
+    $uri = substr($uri, strlen($scriptDir));
+}
+
+// Limpar possíveis prefixos de subpastas
+$uri = preg_replace('#^/api/biblia#i', '', $uri);
+$uri = preg_replace('#^/api#i', '', $uri);
+$uri = preg_replace('#^/biblia#i', '', $uri);
 $segments = array_values(array_filter(explode('/', $uri)));
+
+$method = $_SERVER['REQUEST_METHOD'];
 
 // Rota Raiz: Informações Gerais da API
 if (empty($segments)) {
@@ -111,18 +120,19 @@ if (empty($segments)) {
         'name' => 'Bíblia Oficial API (RESTful)',
         'version' => '1.1.0',
         'status' => 'online',
+        'base_url' => 'https://itadigital.com.br/api/biblia',
         'documentation' => 'https://github.com/itadigitaloficial/bibliaoficial',
         'endpoints' => [
-            'POST /api/users' => 'Criar conta de usuário e obter Token (Público)',
-            'POST /api/users/token' => 'Obter Token de acesso via Email e Senha (Público)',
-            'GET /api/users/me' => 'Consultar dados do seu usuário (Requer Token)',
-            'GET /api/versions' => 'Lista as versões disponíveis (Público)',
-            'GET /api/books' => 'Lista os 66 livros da Bíblia (Público)',
-            'GET /api/books/{abbrev}' => 'Detalhes de um livro (Público)',
-            'GET /api/verses/{version}/{abbrev}/{chapter}' => 'Versículos do capítulo (Requer Token)',
-            'GET /api/verses/{version}/{abbrev}/{chapter}/{verse}' => 'Versículo específico (Requer Token)',
-            'GET /api/verses/{version}/random' => 'Versículo aleatório do dia (Requer Token)',
-            'POST /api/verses/search' => 'Busca de versículos por palavra (Requer Token)'
+            'POST /users' => 'Criar conta de usuário e obter Token (Público)',
+            'POST /users/token' => 'Obter Token de acesso via Email e Senha (Público)',
+            'GET /users/me' => 'Consultar dados do seu usuário (Requer Token)',
+            'GET /versions' => 'Lista as versões disponíveis (Público)',
+            'GET /books' => 'Lista os 66 livros da Bíblia (Público)',
+            'GET /books/{abbrev}' => 'Detalhes de um livro (Público)',
+            'GET /verses/{version}/{abbrev}/{chapter}' => 'Versículos do capítulo (Requer Token)',
+            'GET /verses/{version}/{abbrev}/{chapter}/{verse}' => 'Versículo específico (Requer Token)',
+            'GET /verses/{version}/random' => 'Versículo aleatório do dia (Requer Token)',
+            'POST /verses/search' => 'Busca de versículos por palavra (Requer Token)'
         ]
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
@@ -132,7 +142,7 @@ if (empty($segments)) {
 // 4. ROTAS DE USUÁRIOS E AUTENTICAÇÃO (TOKEN)
 // ==========================================
 
-// POST /api/users (Criar Conta & Gerar Token)
+// POST /users (Criar Conta & Gerar Token)
 if ($segments[0] === 'users' && (!isset($segments[1]) || $segments[1] === 'register') && $method === 'POST') {
     $data = getJsonBody();
     $name = trim($data['name'] ?? '');
@@ -162,7 +172,7 @@ if ($segments[0] === 'users' && (!isset($segments[1]) || $segments[1] === 'regis
     $stmt->execute([$email]);
     if ($stmt->fetch()) {
         http_response_code(409);
-        echo json_encode(['error' => 'Este e-mail já está cadastrado. Utilize POST /api/users/token para recuperar seu token.'], JSON_UNESCAPED_UNICODE);
+        echo json_encode(['error' => 'Este e-mail já está cadastrado. Utilize POST /users/token para recuperar seu token.'], JSON_UNESCAPED_UNICODE);
         exit;
     }
 
@@ -188,7 +198,7 @@ if ($segments[0] === 'users' && (!isset($segments[1]) || $segments[1] === 'regis
     exit;
 }
 
-// POST /api/users/token (Login / Obter Token)
+// POST /users/token (Login / Obter Token)
 if ($segments[0] === 'users' && isset($segments[1]) && $segments[1] === 'token' && $method === 'POST') {
     $data = getJsonBody();
     $email = strtolower(trim($data['email'] ?? ''));
@@ -227,7 +237,7 @@ if ($segments[0] === 'users' && isset($segments[1]) && $segments[1] === 'token' 
     exit;
 }
 
-// GET /api/users/me (Consultar Perfil - Requer Token)
+// GET /users/me (Consultar Perfil - Requer Token)
 if ($segments[0] === 'users' && isset($segments[1]) && $segments[1] === 'me' && $method === 'GET') {
     $user = requireAuth($pdo);
     
@@ -243,14 +253,14 @@ if ($segments[0] === 'users' && isset($segments[1]) && $segments[1] === 'me' && 
 // 5. ROTAS DE METADADOS (PÚBLICAS)
 // ==========================================
 
-// GET /api/versions
+// GET /versions
 if ($segments[0] === 'versions' && $method === 'GET') {
     $stmt = $pdo->query("SELECT id, name, description, language FROM bible_versions ORDER BY id");
     echo json_encode($stmt->fetchAll(), JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// GET /api/books ou GET /api/books/{abbrev}
+// GET /books ou GET /books/{abbrev}
 if ($segments[0] === 'books' && $method === 'GET') {
     if (isset($segments[1])) {
         $abbrev = strtolower(trim($segments[1]));
@@ -300,7 +310,7 @@ if ($segments[0] === 'books' && $method === 'GET') {
 // 6. ROTAS DE VERSÍCULOS (REQUEREM TOKEN)
 // ==========================================
 
-// GET /api/verses/{version}/random
+// GET /verses/{version}/random
 if ($segments[0] === 'verses' && isset($segments[1]) && isset($segments[2]) && $segments[2] === 'random') {
     requireAuth($pdo);
     $version = strtolower(trim($segments[1]));
@@ -334,7 +344,7 @@ if ($segments[0] === 'verses' && isset($segments[1]) && isset($segments[2]) && $
     exit;
 }
 
-// POST /api/verses/search ou GET /api/verses/search?version=nvi&search=termo
+// POST /verses/search ou GET /verses/search?version=nvi&search=termo
 if ($segments[0] === 'verses' && isset($segments[1]) && $segments[1] === 'search') {
     requireAuth($pdo);
     $version = 'nvi';
@@ -380,7 +390,7 @@ if ($segments[0] === 'verses' && isset($segments[1]) && $segments[1] === 'search
     exit;
 }
 
-// GET /api/verses/{version}/{abbrev}/{chapter} ou {verse}
+// GET /verses/{version}/{abbrev}/{chapter} ou {verse}
 if ($segments[0] === 'verses' && isset($segments[1]) && isset($segments[2]) && isset($segments[3])) {
     requireAuth($pdo);
     $version = strtolower(trim($segments[1]));

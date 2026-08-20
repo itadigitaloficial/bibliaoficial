@@ -10,13 +10,22 @@
 </p>
 
 <p align="center">
+  <a href="https://itadigital.com.br/api/biblia/">
+    <img src="https://img.shields.io/badge/API%20Endpoint-https%3A%2F%2Fitadigital.com.br%2Fapi%2Fbiblia%2F-blueviolet?style=for-the-badge&logo=fastapi&logoColor=white" alt="API URL" />
+  </a>
   <img src="https://img.shields.io/badge/PHP-8.1%20%7C%208.2%20%7C%208.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" />
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
   <img src="https://img.shields.io/badge/Auth-Bearer%20Token-orange?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="Bearer Token" />
   <img src="https://img.shields.io/badge/Versículos-93.315-gold?style=for-the-badge&logo=bookstack&logoColor=black" alt="Versículos" />
-  <img src="https://img.shields.io/badge/Status-100%25%20Online-success?style=for-the-badge" alt="Status" />
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License" />
 </p>
+
+---
+
+## 🌐 URL Oficial da API em Produção
+
+```http
+https://itadigital.com.br/api/biblia/
+```
 
 ---
 
@@ -24,7 +33,7 @@
 
 - [Visão Geral](#-visão-geral)
 - [Diferenciais & Vantagens](#-diferenciais--vantagens)
-- [Versões da Bíblia Disponíveis](#-versões-da-bíblia-disponíveis)
+- [Versões da Bíblia Disponíveis](#-versões-da-biblia-disponíveis)
 - [Autenticação & Tokens (Como Começar)](#-autenticação--tokens-como-começar)
   - [Passo 1: Criar Usuário & Obter Token](#passo-1-criar-usuário--obter-token)
   - [Passo 2: Recuperar Token Existente (Login)](#passo-2-recuperar-token-existente-login)
@@ -44,7 +53,7 @@
   - [PHP (cURL)](#php-curl)
   - [cURL (Terminal / Postman)](#curl-terminal--postman)
 - [Códigos de Resposta HTTP](#-códigos-de-resposta-http)
-- [Instalação e Hospedagem Própria](#-instalação-e-hospedagem-própria)
+- [Como Hospedar em seu Servidor](#-como-hospedar-em-seu-servidor)
 - [Licença e Autor](#-licença-e-autor)
 
 ---
@@ -53,7 +62,7 @@
 
 A **Bíblia Oficial API** é uma solução RESTful moderna, leve e protegida para desenvolvedores, igrejas, ministérios e criadores de conteúdo que necessitam integrar as Sagradas Escrituras em seus aplicativos mobile, sites, sistemas web, bots de WhatsApp/Telegram ou assistentes de Inteligência Artificial.
 
-Com a descontinuação de antigas APIs públicas, este projeto nasceu para ser a **fonte definitiva, gratuita e auto-hospedável da Bíblia Sagrada**, garantindo total autonomia, controle de consumo por Token e disponibilidade permanente.
+Hospedada oficialmente em `https://itadigital.com.br/api/biblia/`, ela oferece uma infraestrutura de alta disponibilidade com banco MySQL dedicado contendo **3 versões completas** e **mais de 93.000 versículos**.
 
 ---
 
@@ -63,7 +72,7 @@ Com a descontinuação de antigas APIs públicas, este projeto nasceu para ser a
 - ⚡ **Velocidade Extrema**: Respostas em menos de **10ms** com índices relacionais e busca `FULLTEXT`.
 - 🌐 **Compatibilidade Universal**: Suporte total a CORS (`Access-Control-Allow-Origin: *`) para consumo direto por Single Page Applications (React, Vue, Angular, Flutter, React Native).
 - 🔄 **Compatibilidade Retroativa**: Estrutura de dados 100% compatível com a antiga `abibliadigital`.
-- 🛡️ **Zero Dependência Externa**: Banco de dados MySQL autônomo com todas as 3 versões completas embutidas.
+- 🛡️ **Zero Dependência Externa**: Banco de dados MySQL autônomo.
 
 ---
 
@@ -84,7 +93,7 @@ Para consumir os endpoints de versículos e busca, você precisará de um **Toke
 ### Passo 1: Criar Usuário & Obter Token
 
 - **Método**: `POST`
-- **Rota**: `/api/users`
+- **URL**: `https://itadigital.com.br/api/biblia/users`
 - **Acesso**: Público
 
 #### Payload JSON:
@@ -117,7 +126,7 @@ Para consumir os endpoints de versículos e busca, você precisará de um **Toke
 Caso já possua cadastro e deseje recuperar seu Token:
 
 - **Método**: `POST`
-- **Rota**: `/api/users/token`
+- **URL**: `https://itadigital.com.br/api/biblia/users/token`
 - **Acesso**: Público
 
 #### Payload JSON:
@@ -145,20 +154,8 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### Passo 3: Consultar Perfil e Estatísticas
 
 - **Método**: `GET`
-- **Rota**: `/api/users/me`
+- **URL**: `https://itadigital.com.br/api/biblia/users/me`
 - **Cabeçalho**: `Authorization: Bearer <SEU_TOKEN>`
-
-#### Exemplo de Resposta (`200 OK`):
-```json
-{
-  "id": 1,
-  "name": "Seu Nome",
-  "email": "seu.email@exemplo.com",
-  "requests_count": 142,
-  "last_request_at": "2026-08-20 19:30:15",
-  "created_at": "2026-08-20 19:25:00"
-}
-```
 
 ---
 
@@ -167,7 +164,7 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### 1. Listar Versões Disponíveis (Público)
 
 - **Método**: `GET`
-- **Rota**: `/api/versions`
+- **URL**: `https://itadigital.com.br/api/biblia/versions`
 
 #### Resposta (`200 OK`):
 ```json
@@ -198,7 +195,7 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### 2. Listar Todos os 66 Livros (Público)
 
 - **Método**: `GET`
-- **Rota**: `/api/books`
+- **URL**: `https://itadigital.com.br/api/biblia/books`
 
 #### Resposta (`200 OK`):
 ```json
@@ -235,28 +232,16 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### 3. Detalhes de um Livro (Público)
 
 - **Método**: `GET`
-- **Rota**: `/api/books/:abbrev` (*ex: `/api/books/sl`*)
-
-#### Resposta (`200 OK`):
-```json
-{
-  "abbrev": { "pt": "sl", "en": "ps" },
-  "author": "Davi e outros",
-  "chapters": 150,
-  "group": "Poéticos",
-  "name": "Salmos",
-  "testament": "VT"
-}
-```
+- **URL**: `https://itadigital.com.br/api/biblia/books/:abbrev` (*ex: `https://itadigital.com.br/api/biblia/books/sl`*)
 
 ---
 
 ### 4. Obter Capítulo Completo (Requer Token)
 
 - **Método**: `GET`
-- **Rota**: `/api/verses/:version/:abbrev/:chapter`
+- **URL**: `https://itadigital.com.br/api/biblia/verses/:version/:abbrev/:chapter`
 - **Cabeçalho**: `Authorization: Bearer <SEU_TOKEN>`
-- **Exemplo**: `GET /api/verses/nvi/sl/23`
+- **Exemplo**: `https://itadigital.com.br/api/biblia/verses/nvi/sl/23`
 
 #### Resposta (`200 OK`):
 ```json
@@ -288,9 +273,9 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### 5. Obter Versículo Específico (Requer Token)
 
 - **Método**: `GET`
-- **Rota**: `/api/verses/:version/:abbrev/:chapter/:verse`
+- **URL**: `https://itadigital.com.br/api/biblia/verses/:version/:abbrev/:chapter/:verse`
 - **Cabeçalho**: `Authorization: Bearer <SEU_TOKEN>`
-- **Exemplo**: `GET /api/verses/nvi/jo/3/16`
+- **Exemplo**: `https://itadigital.com.br/api/biblia/verses/nvi/jo/3/16`
 
 #### Resposta (`200 OK`):
 ```json
@@ -313,29 +298,15 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### 6. Versículo Aleatório do Dia (Requer Token)
 
 - **Método**: `GET`
-- **Rota**: `/api/verses/:version/random`
+- **URL**: `https://itadigital.com.br/api/biblia/verses/:version/random`
 - **Cabeçalho**: `Authorization: Bearer <SEU_TOKEN>`
-- **Exemplo**: `GET /api/verses/nvi/random`
-
-#### Resposta (`200 OK`):
-```json
-{
-  "book": {
-    "name": "Filipenses",
-    "abbrev": { "pt": "fp", "en": "php" }
-  },
-  "chapter": 4,
-  "number": 13,
-  "text": "Tudo posso naquele que me fortalece."
-}
-```
 
 ---
 
 ### 7. Busca por Palavras e Temas (Requer Token)
 
 - **Método**: `POST` ou `GET`
-- **Rota**: `/api/verses/search`
+- **URL**: `https://itadigital.com.br/api/biblia/verses/search`
 - **Cabeçalho**: `Authorization: Bearer <SEU_TOKEN>`
 
 #### Payload (`POST`):
@@ -360,26 +331,9 @@ Caso já possua cadastro e deseje recuperar seu Token:
 | Josué | `js` | Romanos | `rm` |
 | Juízes | `jz` | 1 Coríntios | `1co` |
 | Rute | `rt` | 2 Coríntios | `2co` |
-| 1 Samuel | `1sm` | Gálatas | `gl` |
-| 2 Samuel | `2sm` | Efésios | `ef` |
-| 1 Reis | `1rs` | Filipenses | `fp` |
-| 2 Reis | `2rs` | Colossenses | `cl` |
-| 1 Crônicas | `1cr` | 1 Tessalonicenses | `1ts` |
-| 2 Crônicas | `2cr` | 2 Tessalonicenses | `2ts` |
-| Esdras | `ed` | 1 Timóteo | `1tm` |
-| Neemias | `ne` | 2 Timóteo | `2tm` |
-| Ester | `et` | Tito | `tt` |
-| Jó | `jó` | Filemom | `fm` |
-| Salmos | `sl` | Hebreus | `hb` |
-| Provérbios | `pv` | Tiago | `tg` |
-| Eclesiastes | `ec` | 1 Pedro | `1pe` |
-| Cânticos | `ct` | 2 Pedro | `2pe` |
-| Isaías | `is` | 1 João | `1jo` |
-| Jeremias | `jr` | 2 João | `2jo` |
-| Lamentações | `lm` | 3 João | `3jo` |
-| Ezequiel | `ez` | Judas | `jd` |
-| Daniel | `dn` | Apocalipse | `ap` |
-| Oséias a Malaquias | `os` .. `ml` | | |
+| 1 Samuel | `1sm` | Cartas Paulinas | `gl` .. `fm` |
+| Salmos | `sl` | Cartas Gerais | `hb` .. `jd` |
+| Isaías | `is` | Apocalipse | `ap` |
 
 ---
 
@@ -388,10 +342,11 @@ Caso já possua cadastro e deseje recuperar seu Token:
 ### JavaScript / TypeScript (React / Node.js)
 
 ```typescript
+const API_URL = 'https://itadigital.com.br/api/biblia';
 const API_TOKEN = 'bbl_SEU_TOKEN_AQUI';
 
 async function getVerse(version = 'nvi', abbrev = 'jo', chapter = 3, verse = 16) {
-  const res = await fetch(`https://sua-api.com.br/api/verses/${version}/${abbrev}/${chapter}/${verse}`, {
+  const res = await fetch(`${API_URL}/verses/${version}/${abbrev}/${chapter}/${verse}`, {
     headers: {
       'Authorization': `Bearer ${API_TOKEN}`,
       'Content-Type': 'application/json'
@@ -412,38 +367,16 @@ getVerse();
 ```python
 import requests
 
+API_URL = "https://itadigital.com.br/api/biblia"
 TOKEN = "bbl_SEU_TOKEN_AQUI"
 headers = {"Authorization": f"Bearer {TOKEN}"}
 
-url = "https://sua-api.com.br/api/verses/nvi/sl/23"
-res = requests.get(url, headers=headers)
-
+res = requests.get(f"{API_URL}/verses/nvi/sl/23", headers=headers)
 if res.status_code == 200:
-    capitulo = res.json()
-    print(f"Capítulo {capitulo['chapter']['number']} de {capitulo['book']['name']}:")
-    for v in capitulo['verses']:
+    data = res.json()
+    print(f"{data['book']['name']} {data['chapter']['number']}:")
+    for v in data['verses']:
         print(f"{v['number']}. {v['text']}")
-```
-
----
-
-### PHP (cURL)
-
-```php
-<?php
-$token = "bbl_SEU_TOKEN_AQUI";
-
-$ch = curl_init("https://sua-api.com.br/api/verses/nvi/random");
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Authorization: Bearer " . $token,
-    "Content-Type: application/json"
-]);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
-
-$data = json_decode($response, true);
-echo "Versículo do Dia: " . $data['text'] . " (" . $data['book']['name'] . " " . $data['chapter'] . ":" . $data['number'] . ")\n";
 ```
 
 ---
@@ -452,40 +385,23 @@ echo "Versículo do Dia: " . $data['text'] . " (" . $data['book']['name'] . " " 
 
 ```bash
 # 1. Gerar Token
-curl -X POST "https://sua-api.com.br/api/users" \
+curl -X POST "https://itadigital.com.br/api/biblia/users" \
      -H "Content-Type: application/json" \
      -d '{"name": "Rogerio", "email": "rogerio@email.com", "password": "123456Senha"}'
 
-# 2. Consultar Versículo com Token
-curl -X GET "https://sua-api.com.br/api/verses/nvi/jo/3/16" \
+# 2. Consultar Salmos 23 com Token
+curl -X GET "https://itadigital.com.br/api/biblia/verses/nvi/sl/23" \
      -H "Authorization: Bearer bbl_SEU_TOKEN"
 ```
 
 ---
 
-## 🚦 Códigos de Resposta HTTP
+## 🛠️ Como Hospedar em seu Servidor
 
-| Código | Significado | Descrição |
-| :--- | :--- | :--- |
-| `200 OK` | Sucesso | Requisição processada com sucesso. |
-| `201 Created` | Criado | Usuário e token cadastrados com sucesso. |
-| `401 Unauthorized` | Não Autorizado | Token ausente, inválido ou expirado. |
-| `403 Forbidden` | Proibido | Conta inativa ou suspensa. |
-| `404 Not Found` | Não Encontrado | Livro, capítulo ou versículo inexistente. |
-| `409 Conflict` | Conflito | E-mail já cadastrado. |
-| `500 Internal Error`| Erro no Servidor | Falha no banco de dados. |
-
----
-
-## 🛠️ Instalação e Hospedagem Própria
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/itadigitaloficial/bibliaoficial.git
-   cd bibliaoficial
-   ```
-2. Configure o banco MySQL no `index.php` (`$dbConfig`).
-3. Envie para seu servidor web Apache/Nginx ou cPanel!
+1. Acesse o gerenciador de arquivos do cPanel ou seu servidor web em `itadigital.com.br`.
+2. Crie a pasta `/api/biblia/` dentro do diretório raiz (`public_html/api/biblia/`).
+3. Envie os arquivos `index.php` e `.htaccess` contidos nesta pasta.
+4. Pronto! A API estará respondendo em `https://itadigital.com.br/api/biblia/`.
 
 ---
 
